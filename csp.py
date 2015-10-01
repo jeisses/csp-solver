@@ -43,6 +43,8 @@ def bt(assignment, domains, lvl, last_var):
     
 constraints = sudoku.create_constraints()
 asg = bt({}, sudoku.create_domains(), 0, "")
+board1 = "............942.8.16.....29........89.6.....14..25......4.......2...8.9..5....7.."
+assignment = sudoku.start_assign(board1)
 
 print "Done :) --"
 solution = asg

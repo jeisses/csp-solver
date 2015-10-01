@@ -27,5 +27,14 @@ def start_assign(board):
             startingAssignments[variableName] = board[counter]
         counter += 1
     return startingAssignments
+    
+def print_board(assignments):
+    counter = 0
+    for item in assignments:
+        print item.value()
+        if counter%9 == 0:
+            print "\n"
+        
+        
 
   
