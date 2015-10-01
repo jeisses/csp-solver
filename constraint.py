@@ -23,3 +23,15 @@ def _satisfied_all_diff(vars, ass):
                 return False
 
     return True
+
+
+def propagate(domains, assignment, constraints, last_var):
+    if last_var == "":
+        return
+    
+    for _, const_vars in constraints:
+        if last_var in const_vars:
+            for var in const_vars:
+                if var != last_var:
+                    if assignment[last_var] in domains[var]:
+                        domains[var].remove(assignment[last_var])
