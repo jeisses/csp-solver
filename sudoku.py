@@ -19,22 +19,27 @@ board1 = "............942.8.16.....29........89.6.....14..25......4.......2...8.
 def start_assign(board):
     startingAssignments = {}
     counter = 0
-    for item in board:
-        if item != '.':
+    for tile in board:
+        if tile != '.':
             row = counter/9
             col = counter%9
             variableName = 'x' + str(row + 1) + str(col + 1)
-            startingAssignments[variableName] = board[counter]
+            startingAssignments[variableName] = int(board[counter])
         counter += 1
     return startingAssignments
     
 def print_board(assignments):
-    counter = 0
-    for item in assignments:
-        print item.value()
-        if counter%9 == 0:
-            print "\n"
-        
-        
+    for col in range(1,10):
+        for row in range(1,10):
+            variable = 'x' + str(col) + str(row)
+            if variable in assignments:
+                print assignments[variable],
+            else:
+                print '.',
+        print "\n"
+ 
+#sa = start_assign(board1) 
+#print sa     
+#print_board(sa)        
 
   
