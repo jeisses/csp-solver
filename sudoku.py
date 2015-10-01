@@ -16,7 +16,7 @@ def create_constraints():
 
 board1 = "............942.8.16.....29........89.6.....14..25......4.......2...8.9..5....7.."
 
-def assign(board):
+def start_assign(board):
     startingAssignments = {}
     counter = 0
     for item in board:
@@ -28,5 +28,4 @@ def assign(board):
         counter += 1
     return startingAssignments
 
-
-print assign(board1)   
+  
