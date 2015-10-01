@@ -7,4 +7,8 @@ def create_constraints():
     """Create sudoku constraints"""
     col_cons = [("ALL_DIFF", ["x%s%s"%(row,col) for col in range(1, 10)]) for row in range(1,10)]
     row_cons = [("ALL_DIFF", ["x%s%s"%(col,row) for col in range(1, 10)]) for row in range(1,10)]
-    return col_cons + row_cons
+        box_cons = []
+    for horiz in range(3):
+        for vert in range(3):
+            box_cons.append(("ALL_DIFF", ["x%s%s"%(col,row) for col in range(vert*3 + 1, vert*3 + 4) for row in range(horiz*3 + 1, horiz*3 + 4)]))
+    return col_cons + row_cons + box_cons
