@@ -14,7 +14,6 @@ def create_constraints():
     return col_cons + row_cons + box_cons
 
 
-board1 = "............942.8.16.....29........89.6.....14..25......4.......2...8.9..5....7.."
 
 def start_assign(board):
     startingAssignments = {}
@@ -28,6 +27,7 @@ def start_assign(board):
         counter += 1
     return startingAssignments
     
+<<<<<<< HEAD
 def print_board(assignments):
     for col in range(1,10):
         for row in range(1,10):
@@ -41,5 +41,16 @@ def print_board(assignments):
 #sa = start_assign(board1) 
 #print sa     
 #print_board(sa)        
+=======
+def print_board(assignment):
+    counter = 0
+    for item, value in assignment.iteritems():
+        print value
+        if counter%9 == 0:
+            print "\n"
+        counter += 1
+        
+        
+>>>>>>> origin/master
 
   

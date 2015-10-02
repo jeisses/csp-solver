@@ -1,15 +1,17 @@
 import sudoku
 from constraint import all_satisfied, propagate
 import random
+from copy import deepcopy
 
+# Global variables
+constraints = sudoku.create_constraints()
 
 def bt(assignment, domains, lvl, last_var):
-    if lvl > 1000:
-        print "Max depth reached"
-        return False
+    # Copy CSP state
+    new_domains = deepcopy(domains)
+    new_assignment = deepcopy(assignment)
 
-    # Constraint Propagation
-    new_domains = domains.copy()
+    # Constraint Propagation. This prunes the domains.
     propagate(new_domains, assignment, constraints, last_var)
     
     # If Empty domains: 
@@ -17,7 +19,7 @@ def bt(assignment, domains, lvl, last_var):
 
     # If we filled in the entire board
     # TODO: correct check
-    if len(assignment) == 60:
+    if len(assignment) == 81:
         return assignment
 
     # If Single Domain:
@@ -28,7 +30,6 @@ def bt(assignment, domains, lvl, last_var):
     while var in assignment:
         var = random.choice(domains.keys())
 
-    new_assignment = assignment.copy()
     new_assignment[var] = None
 
     # Try each value in domain
@@ -41,12 +42,13 @@ def bt(assignment, domains, lvl, last_var):
                 
     return False
     
-constraints = sudoku.create_constraints()
-asg = bt({}, sudoku.create_domains(), 0, "")
+# Board setup
 board1 = "............942.8.16.....29........89.6.....14..25......4.......2...8.9..5....7.."
-assignment = sudoku.start_assign(board1)
+start_assignment = sudoku.start_assign(board1)
 
-print "Done :) --"
-solution = asg
+print "Solving CSP for sudoku..."
+
+solution = bt(start_assignment, sudoku.create_domains(), 0, "")
+
+print "Done! Solution: "
 print solution
-    
