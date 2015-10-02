@@ -27,7 +27,6 @@ def start_assign(board):
         counter += 1
     return startingAssignments
     
-<<<<<<< HEAD
 def print_board(assignments):
     for col in range(1,10):
         for row in range(1,10):
@@ -37,20 +36,5 @@ def print_board(assignments):
             else:
                 print '.',
         print "\n"
- 
-#sa = start_assign(board1) 
-#print sa     
-#print_board(sa)        
-=======
-def print_board(assignment):
-    counter = 0
-    for item, value in assignment.iteritems():
-        print value
-        if counter%9 == 0:
-            print "\n"
-        counter += 1
-        
-        
->>>>>>> origin/master
 
   
