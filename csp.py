@@ -19,7 +19,7 @@ def bt(assignment, domains, lvl, last_var):
 
     # If we filled in the entire board
     # TODO: correct check
-    if len(assignment) == 81:
+    if len(assignment) == 60:
         return assignment
 
     # If Single Domain:
@@ -45,10 +45,13 @@ def bt(assignment, domains, lvl, last_var):
 # Board setup
 board1 = "............942.8.16.....29........89.6.....14..25......4.......2...8.9..5....7.."
 start_assignment = sudoku.start_assign(board1)
-
+Domains = sudoku.create_domains()
+for item in start_assignment:
+    propagate(Domains, start_assignment, constraints, item)
 print "Solving CSP for sudoku..."
 
-solution = bt(start_assignment, sudoku.create_domains(), 0, "")
+solution = bt(start_assignment, Domains, 0, "")
 
 print "Done! Solution: "
 print solution
+sudoku.print_board(solution)

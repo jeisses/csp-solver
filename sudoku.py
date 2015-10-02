@@ -35,6 +35,6 @@ def print_board(assignments):
                 print assignments[variable],
             else:
                 print '.',
-        print "\n"
+        print ""
 
   
