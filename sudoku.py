@@ -14,7 +14,6 @@ def create_constraints():
     return col_cons + row_cons + box_cons
 
 
-board1 = "............942.8.16.....29........89.6.....14..25......4.......2...8.9..5....7.."
 
 def assign(board):
     startingAssignments = {}
@@ -27,6 +26,3 @@ def assign(board):
             startingAssignments[variableName] = board[counter]
         counter += 1
     return startingAssignments
-
-
-print assign(board1)   
