@@ -15,7 +15,7 @@ def create_constraints():
 
 
 
-def assign(board):
+def start_assign(board):
     startingAssignments = {}
     counter = 0
     for item in board:
@@ -26,3 +26,15 @@ def assign(board):
             startingAssignments[variableName] = board[counter]
         counter += 1
     return startingAssignments
+    
+def print_board(assignment):
+    counter = 0
+    for item, value in assignment.iteritems():
+        print value
+        if counter%9 == 0:
+            print "\n"
+        counter += 1
+        
+        
+
+  

@@ -3,6 +3,8 @@ from constraint import all_satisfied, propagate
 import random
 from copy import deepcopy
 
+# Global variables
+constraints = sudoku.create_constraints()
 
 def bt(assignment, domains, lvl, last_var):
     # Copy CSP state
@@ -42,7 +44,7 @@ def bt(assignment, domains, lvl, last_var):
     
 # Board setup
 board1 = "............942.8.16.....29........89.6.....14..25......4.......2...8.9..5....7.."
-start_assignment = sudoku.assign(board1)
+start_assignment = sudoku.start_assign(board1)
 
 print "Solving CSP for sudoku..."
 
@@ -50,4 +52,3 @@ solution = bt(start_assignment, sudoku.create_domains(), 0, "")
 
 print "Done! Solution: "
 print solution
-    
