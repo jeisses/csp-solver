@@ -1,57 +1,54 @@
-import sudoku
+import time
 from constraint import all_satisfied, propagate
+import heuristic as hr
 import random
 from copy import deepcopy
 
 # Global variables
-constraints = sudoku.create_constraints()
+constraints = []
+variable_heuristic = "smallest_domain"
+value_heuristic = "random"
 
-def bt(assignment, domains, lvl, last_var):
+def solve(assignment, domains):
+    """Solve a CSP problem. Starts the backtrack process"""
+    # Use initial assignment to prune domains
+    new_assignment = deepcopy(assignment)
+    for var in assignment:
+        domains[var] = [new_assignment[var]]
+        propagate(domains, new_assignment, constraints, [var])
+
+    return bt(assignment, domains, [])
+
+def bt(assignment, domains, last_var):
+    """Performs a CSP solving with the Backtrack algorithm"""
     # Copy CSP state
     new_domains = deepcopy(domains)
     new_assignment = deepcopy(assignment)
 
-    # Constraint Propagation. This prunes the domains.
-    propagate(new_domains, assignment, constraints, last_var)
-    
-    # If Empty domains: 
-    #    return False
+    # Prune the domains connected with the assigned variables
+    assigned_vars = [last_var]
+    while assigned_vars != False and len(assigned_vars) > 0:
+        assigned_vars = propagate(new_domains, new_assignment, constraints, assigned_vars)
 
-    # If we filled in the entire board
-    # TODO: correct check
-    if len(assignment) == 60:
-        return assignment
+    # Check for inconsistency
+    if (assigned_vars == False):
+        return False
 
-    # If Single Domain:
-    #   var = [the_var] 
-    # Else:
-    #   var = pick_variable(domains, constraints) 
-    var = random.choice(domains.keys())
-    while var in assignment:
-        var = random.choice(domains.keys())
+    # Pick the next variable
+    var = hr.pick_variable(new_domains, method="smallest_domain")
 
-    new_assignment[var] = None
+    # Check if a solution is found done
+    if var == None:
+        return new_assignment
 
-    # Try each value in domain
-    for value in domains[var]:
+    # Backtracking for each value
+    values = hr.pick_values(var, domains, constraints, method="random")
+    for value in values:
         new_assignment[var] = value
-        if all_satisfied(constraints, new_assignment) == True:
-            res = bt(new_assignment, new_domains, lvl + 1, var)
-            if res != False:
-                return res
+        new_domains[var] = [value]
+        res = bt(new_assignment, new_domains, var)
+        if res != False:
+            return res
                 
     return False
     
-# Board setup
-board1 = "............942.8.16.....29........89.6.....14..25......4.......2...8.9..5....7.."
-start_assignment = sudoku.start_assign(board1)
-Domains = sudoku.create_domains()
-for item in start_assignment:
-    propagate(Domains, start_assignment, constraints, item)
-print "Solving CSP for sudoku..."
-
-solution = bt(start_assignment, Domains, 0, "")
-
-print "Done! Solution: "
-print solution
-sudoku.print_board(solution)
