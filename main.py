@@ -19,7 +19,7 @@ sudoku_domains = sudoku.create_domains(10)
 csp.variable_heuristic = "smallest_domain"
 csp.value_heuristic = "random"
 
-times = []
+stats = []
 
 print "Start solving the sample file..."
 
@@ -38,7 +38,7 @@ with open(file_in, "r") as f_in,\
         local_start = time.time()
         solution = csp.solve(assignment, sudoku_domains)
         duration = time.time() - local_start
-        times.append(duration) 
+        stats.append((duration, csp.backtracks, csp.splits))
 
         # Progress bar
         if idx % update_step == 0:
@@ -52,6 +52,7 @@ with open(file_in, "r") as f_in,\
 duration = time.time() - start
 print "\nSolved in %s seconds. Check %s for results"%(duration,file_out)
 
+stats = numpy.asarray(stats)
+numpy.savetxt("stats.txt", stats)
 
-numpy.savetxt("times.txt", times)
-
+print "Times: %s  BTs: %s  Splits: %s"%(numpy.average(stats[:,0]), numpy.average(stats[:,1]), numpy.average(stats[:,2]))

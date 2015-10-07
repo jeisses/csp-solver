@@ -8,8 +8,16 @@ constraints = []
 variable_heuristic = "random"
 value_heuristic = "random"
 
+# Stats
+backtracks = 0
+splits = 0
+
 def solve(assignment, domains):
     """Solve a CSP problem. Starts the backtrack process"""
+    global backtracks, splits, constraints
+
+    backtracks = splits = 0
+
     # Fast deepcopy the initial state
     new_domains = {k: [v for v in values] for k,values in domains.iteritems()}
     new_assignment = {k: v for k,v in assignment.iteritems()}
@@ -24,6 +32,8 @@ def solve(assignment, domains):
 
 def bt(assignment, domains, last_var):
     """Performs a CSP solving with the Backtrack algorithm"""
+    global backtracks, splits, constraints
+
     # Fast deepcopy the CSP state
     new_domains = {k: [v for v in values] for k,values in domains.iteritems()}
     new_assignment = {k: v for k,v in assignment.iteritems()}
@@ -38,20 +48,22 @@ def bt(assignment, domains, last_var):
         return False
 
     # Pick the next variable
-    var = hr.pick_variable(new_domains, method="smallest_domain")
+    var = hr.pick_variable(new_domains, method=variable_heuristic)
 
     # Check if a solution is found done
     if var == None:
         return new_assignment
 
     # Backtracking for each value
-    values = hr.pick_values(var, domains, constraints, method="random")
+    values = hr.pick_values(var, domains, constraints, method=value_heuristic)
     for value in values:
         new_assignment[var] = value
         new_domains[var] = [value]
         res = bt(new_assignment, new_domains, var)
         if res != False:
             return res
-                
+        backtracks += 1
+        
+    splits += 1
     return False
     
