@@ -15,7 +15,12 @@ def create_constraints(size = 9):
 
     return col_cons + row_cons + box_cons
 
-
+def create_hyper_constraints(size):
+    """Creates the constraints for a hypersudoku"""
+    hyper = []
+    for (startx,starty) in [(1,1), (5,1), (1,5), (5,5)]:
+        hyper.append(("ALL_DIFF", ["x%s%s"%(row+startx+1,col+starty+1) for col in range(0, 3) for row in range(0, 3)]))
+    return hyper + create_constraints(size)
 
 def start_assign(board):
     startingAssignments = {}
