@@ -2,6 +2,8 @@ import csp, sudoku
 import time, sys
 from copy import deepcopy
 
+import numpy
+
 # Parse args
 if len(sys.argv) < 3:
     print "Please use with 2 arguments, e.g. run_csp sudokus.txt solutions.txt"
@@ -22,21 +24,25 @@ times = []
 print "Start solving the sample file..."
 
 start = time.time()
+
+# Setup progress bar
 num_lines = sum(1 for line in open(file_in, "r")) * 1.0
 update_step = max(int(num_lines / 100), 1)
-with open(file_in, "r") as f_in, open(file_out, "w") as f_out:
-    for idx, line in enumerate(f_in):
-        assignment = deepcopy(sudoku.start_assign(line))
-        domains = deepcopy(sudoku_domains)
 
+with open(file_in, "r") as f_in,\
+     open(file_out, "w") as f_out:
+    for idx, line in enumerate(f_in):
+        assignment = sudoku.start_assign(line)
+
+        # Solve CSP and store time
         local_start = time.time()
-        solution = csp.solve(assignment, domains)
+        solution = csp.solve(assignment, sudoku_domains)
         duration = time.time() - local_start
         times.append(duration) 
 
+        # Progress bar
         if idx % update_step == 0:
             progress = int(idx / num_lines * 100)
-
             sys.stdout.write('\r[{0}] {1}%'.format('#'*int(progress/10), progress))
             sys.stdout.flush()
 
@@ -45,4 +51,7 @@ with open(file_in, "r") as f_in, open(file_out, "w") as f_out:
 
 duration = time.time() - start
 print "\nSolved in %s seconds. Check %s for results"%(duration,file_out)
+
+
+numpy.savetxt("times.txt", times)
 

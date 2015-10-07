@@ -25,11 +25,23 @@ def _satisfied_all_diff(vars, ass):
     return True
 
 
-def propagate(domains, assignment, constraints, last_vars):
+def propagate(domains, assignment, constraints, last_vars, method="node_consistency"):
+    """Prune the domains by checking the assignment of the last
+    variable and assign any unit clauses that are found. This function
+    executes any "forced moves" created after an assignment.
+
+    Return False if the current assignemtn is inconsistent
+    Return array of assigned variables otherwise.
+
+    Note: this function can be called again on the variables it has
+    assigned.
+    """
     if len(last_vars) == 0:
         return []
-    
+
     unit_domains = []
+    
+
     for last_var in last_vars:
         for _, const_vars in constraints:
             if last_var in const_vars:

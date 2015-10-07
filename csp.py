@@ -2,28 +2,31 @@ import time
 from constraint import all_satisfied, propagate
 import heuristic as hr
 import random
-from copy import deepcopy
 
 # Global variables
 constraints = []
-variable_heuristic = "smallest_domain"
+variable_heuristic = "random"
 value_heuristic = "random"
 
 def solve(assignment, domains):
     """Solve a CSP problem. Starts the backtrack process"""
-    # Use initial assignment to prune domains
-    new_assignment = deepcopy(assignment)
-    for var in assignment:
-        domains[var] = [new_assignment[var]]
-        propagate(domains, new_assignment, constraints, [var])
+    # Fast deepcopy the initial state
+    new_domains = {k: [v for v in values] for k,values in domains.iteritems()}
+    new_assignment = {k: v for k,v in assignment.iteritems()}
 
-    return bt(assignment, domains, [])
+    # Use initial assignment to prune domains
+    assigned_vars = assignment.keys()
+    while assigned_vars != False and len(assigned_vars) > 0:
+        assigned_vars = propagate(new_domains, new_assignment, constraints, assigned_vars)
+
+    # Start the solver
+    return bt(new_assignment, new_domains, [])
 
 def bt(assignment, domains, last_var):
     """Performs a CSP solving with the Backtrack algorithm"""
-    # Copy CSP state
-    new_domains = deepcopy(domains)
-    new_assignment = deepcopy(assignment)
+    # Fast deepcopy the CSP state
+    new_domains = {k: [v for v in values] for k,values in domains.iteritems()}
+    new_assignment = {k: v for k,v in assignment.iteritems()}
 
     # Prune the domains connected with the assigned variables
     assigned_vars = [last_var]
