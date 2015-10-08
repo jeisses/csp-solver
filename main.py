@@ -16,8 +16,8 @@ file_out = sys.argv[2]
 csp.constraints = sudoku.create_constraints(10)
 sudoku_domains = sudoku.create_domains(10)
 
-csp.variable_heuristic = "smallest_domain" #random, smallest_domain, smallest_domain_then_most_constraining
-csp.value_heuristic = "least_constraining" #random, least_constraining
+csp.variable_heuristic = "smallest_domain" #random, smallest_domain, smallest_domain_then_reduces_most_domains
+csp.value_heuristic = "highest_promise" #random, reduce_least_num_of_smallest_domains, highest_promise
 
 stats = []
 

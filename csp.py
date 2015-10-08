@@ -22,7 +22,7 @@ def solve(assignment, domains):
     # Fast deepcopy the initial state
     new_domains = {k: [v for v in values] for k,values in domains.iteritems()}
     new_assignment = {k: v for k,v in assignment.iteritems()}
-
+    
     # Use initial assignment to prune domains
     assigned_vars = assignment.keys()
     while assigned_vars != False and len(assigned_vars) > 0:
@@ -39,6 +39,7 @@ def bt(assignment, domains, last_var):
     new_domains = {k: [v for v in values] for k,values in domains.iteritems()}
     new_assignment = {k: v for k,v in assignment.iteritems()}
 
+
     # Prune the domains connected with the assigned variables
     assigned_vars = [last_var]
     while assigned_vars != False and len(assigned_vars) > 0:
@@ -49,7 +50,8 @@ def bt(assignment, domains, last_var):
         return False
 
     # Pick the next variable
-    var = hr.pick_variable(new_domains, method=variable_heuristic)
+    var = hr.pick_variable(new_domains, constraints, method=variable_heuristic)
+    #sudoku.print_board_domains(domains)
 
     # Check if a solution is found done
     if var == None:
