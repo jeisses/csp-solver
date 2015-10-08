@@ -2,11 +2,12 @@ import time
 from constraint import all_satisfied, propagate
 import heuristic as hr
 import random
+import sudoku
 
 # Global variables
 constraints = []
-variable_heuristic = "random"
-value_heuristic = "random"
+variable_heuristic = ""
+value_heuristic = ""
 
 # Stats
 backtracks = 0
@@ -58,7 +59,6 @@ def bt(assignment, domains, last_var):
     values = hr.pick_values(var, domains, constraints, method=value_heuristic)
     for value in values:
         new_assignment[var] = value
-        new_domains[var] = [value]
         res = bt(new_assignment, new_domains, var)
         if res != False:
             return res

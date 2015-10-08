@@ -31,7 +31,7 @@ def propagate(domains, assignment, constraints, last_vars, method="node_consiste
     executes any "forced moves" created after an assignment.
 
     Return False if the current assignemtn is inconsistent
-    Return array of assigned variables otherwise.
+    Return array of assigned variables (domains to be pruned) otherwise.
 
     Note: this function can be called again on the variables it has
     assigned.
@@ -40,7 +40,11 @@ def propagate(domains, assignment, constraints, last_vars, method="node_consiste
         return []
 
     unit_domains = []
-    
+
+    #reduce domains for assigned variables to 1.
+    for assign in assignment:
+        b = [assignment[assign]]
+        domains[assign] = b        
 
     for last_var in last_vars:
         for _, const_vars in constraints:

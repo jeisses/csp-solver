@@ -23,6 +23,9 @@ def create_hyper_constraints(size):
     return hyper + create_constraints(size)
 
 def start_assign(board):
+    """parse a Sudoku board
+    board = string of consisiting of {0..9} and '.', length = 81
+    returns: A dictionary of variable names {x11...x99} corresponding to assigned numbers {0..9}"""
     startingAssignments = {}
     counter = 0
     for tile in board:
@@ -44,4 +47,14 @@ def print_board(assignments):
                 print '.',
         print ""
 
-  
+def print_board_domains(domains):
+    """prints an ASCII version of a Sudoku board
+    domains = domains created by create_domains"""
+    for col in range(1,10):
+        for row in range(1,10):
+            variable = 'x' + str(col) + str(row)
+            if variable in domains and len(domains[variable]) == 1:
+                print domains[variable][0],
+            else:
+                print '.',
+        print ""  
