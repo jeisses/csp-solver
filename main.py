@@ -53,6 +53,6 @@ duration = time.time() - start
 print "\nSolved in %s seconds. Check %s for results"%(duration,file_out)
 
 stats = numpy.asarray(stats)
-numpy.savetxt(csp.variable_heuristic + "_" + csp.value_heuristic + "_" + str(int(time.time()))[-7:], stats)
+numpy.savetxt("stats/"+csp.variable_heuristic + "_" + csp.value_heuristic + "_" + str(int(time.time()))[-7:], stats)
 
 print "Times: %s  BTs: %s  Splits: %s"%(numpy.average(stats[:,0]), numpy.average(stats[:,1]), numpy.average(stats[:,2]))
