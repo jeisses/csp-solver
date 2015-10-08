@@ -41,12 +41,12 @@ def propagate(domains, assignment, constraints, last_vars, method="node_consiste
 
     unit_domains = []
 
-    #reduce domains for assigned variables to 1.
-    for assign in assignment:
-        b = [assignment[assign]]
-        domains[assign] = b        
-
     for last_var in last_vars:
+        # Set domains of the assigned variables
+        if last_var:
+            domains[last_var] = [assignment[last_var]]
+
+        # Propagate constraints
         for _, const_vars in constraints:
             if last_var in const_vars:
                 for var in const_vars:
