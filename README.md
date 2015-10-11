@@ -13,7 +13,7 @@ Components are namespaced by their file.
 
 - **csp.py** contains the CSP sovler backtrack algorithm
 - **sudoku.py** contains functions for generating, parsing and displaying sudoku CSPs
-- **constraint.py** contains implementation of the constraint (ALL_DIFFERENT) and propagation algorithm
+- **constraint.py** contains implementation of the constraints and propagation algorithm. Currently only the `all different` constraint is supported.
 - **heuristic.py** contains heuristic functions discussed in the project
 
 ### Adding constraints
@@ -22,7 +22,7 @@ The Sudoku constraints are generated in the `create_constraints` function in `su
 
 ```python
 (type, [var1, var2, var3])
-
+e.g.
 ("ALL_DIFF", ["x11", "x12", "x13", "x14", "x15", "x16", "x17", "x18", "x19"])
 ```
 
@@ -36,7 +36,7 @@ The default heuristics when running the solver are:
 - **variable heuristic**:  `smallest_domain`
 - **value_heuristic**: `random`
 
-They have the fastest runtime performance. Heuristics can be changed in `main.py`:
+They have the fastest runtime performance. Heuristics can be changed in `main.py`, e.g.:
 
 ```python
 csp.variable_heuristic = "smallest_domain" 

@@ -2,7 +2,9 @@ import csp, sudoku
 import time, sys
 from copy import deepcopy
 
-import numpy
+## Uncomment this and the codeblock at the bottom
+## to print and save time/split/bt stats.
+#import numpy
 
 # Parse args
 if len(sys.argv) < 3:
@@ -17,7 +19,7 @@ csp.constraints = sudoku.create_constraints(10)
 sudoku_domains = sudoku.create_domains(10)
 
 csp.variable_heuristic = "smallest_domain" #random, smallest_domain, smallest_domain_then_reduces_most_domains
-csp.value_heuristic = "highest_promise" #random, reduce_least_num_of_smallest_domains, highest_promise
+csp.value_heuristic = "random" #random, reduce_least_num_of_smallest_domains, highest_promise
 
 stats = []
 
@@ -52,7 +54,8 @@ with open(file_in, "r") as f_in,\
 duration = time.time() - start
 print "\nSolved in %s seconds. Check %s for results"%(duration,file_out)
 
-stats = numpy.asarray(stats)
-numpy.savetxt("stats/"+csp.variable_heuristic + "_" + csp.value_heuristic + "_" + str(int(time.time()))[-7:], stats)
-
-print "Times: %s  BTs: %s  Splits: %s"%(numpy.average(stats[:,0]), numpy.average(stats[:,1]), numpy.average(stats[:,2]))
+## Uncomment the following to save and display the time/bts/split stats.
+## Requires Numpy! 
+#stats = numpy.asarray(stats)
+#numpy.savetxt("stats/"+csp.variable_heuristic + "_" + csp.value_heuristic + "_" + str(int(time.time()))[-7:], stats)
+#print "Times: %s  BTs: %s  Splits: %s"%(numpy.average(stats[:,0]), numpy.average(stats[:,1]), numpy.average(stats[:,2]))
