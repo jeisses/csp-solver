@@ -14,8 +14,8 @@ file_out = sys.argv[2]
 csp.constraints = sudoku.create_constraints(10)
 sudoku_domains = sudoku.create_domains(10)
 
-csp.variable_heuristic = "smallest_domain" #random, smallest_domain, smallest_domain_then_reduces_most_domains
-csp.value_heuristic = "highest_promise" #random, reduce_least_num_of_smallest_domains, highest_promise
+csp.variable_heuristic = "smallest_domain" #random, smallest_domain
+csp.value_heuristic = "highest_promise" #random, least_constraining, highest_promise, most_constraining, lowest_promise
 
 # Stats
 times  = []
@@ -23,13 +23,12 @@ bts    = []
 splits = []
 stats  = []
 
-print "Start solving the sample file..."
-
-start = time.time()
-
 # Setup progress bar
 num_lines = sum(1 for line in open(file_in, "r")) * 1.0
 update_step = max(int(num_lines / 100), 1)
+
+print "Start solving the sample file..."
+start = time.time()
 
 with open(file_in, "r") as f_in,\
      open(file_out, "w") as f_out:

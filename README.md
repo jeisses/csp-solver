@@ -1,20 +1,28 @@
-csp-solver
-==========
-
 Knowledge Representation Project - CSP solver
-
-## Value Ordering Heuristics for Sudoku CSPs
+==========
+Value Ordering Heuristics for Sudoku CSPs
 
 ### Requirements
 Python 2.7
 
+### Usage
+
+From the shell run:
+```
+./my-csp-solver data/sudoku-1000.txt sudoku-1000-solution.txt
+```
+Or use python directly:
+```
+python main.py data/sudoku-1000.txt sudoku-1000-solution.txt
+```
+
 ### Project layout
-Components are namespaced by their file.
+Functions are split in files
 
 - **csp.py** contains the CSP sovler backtrack algorithm
 - **sudoku.py** contains functions for generating, parsing and displaying sudoku CSPs
 - **constraint.py** contains implementation of the constraints and propagation algorithm. Currently only the `all different` constraint is supported.
-- **heuristic.py** contains heuristic functions discussed in the project
+- **heuristic.py** contains heuristic functions discussed in the paper
 
 ### Adding constraints
 
@@ -34,11 +42,12 @@ The following constraint types are supported:
 The default heuristics when running the solver are:
 
 - **variable heuristic**:  `smallest_domain`
-- **value_heuristic**: `random`
+- **value_heuristic**: `highest_promise`
 
-They have the fastest runtime performance. Heuristics can be changed in `main.py`, e.g.:
+Heuristics can be changed in `main.py`, e.g.:
 
 ```python
 csp.variable_heuristic = "smallest_domain" 
 csp.value_heuristic = "reduce_least_num_of_smallest_domains"
 ```
+

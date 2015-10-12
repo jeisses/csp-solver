@@ -34,13 +34,9 @@ def pick_values(var, domains, constraints, method="random"):
     # The possible values to choose from
     values = domains[var]
     
-    # For 2 heuristics the reverse case is supported. Identify them and
-    # state that they should be reversed.
+    # The promise heuristic should be reversed if "lowest" is selected
     reverse = False
-    if method == "reduce_most_num_of_smallest_domains":
-        reverse = True
-        method = "reduce_least_num_of_smallest_domains"
-    elif method == "lowest_promive":
+    if method == "lowest_promise":
         reverse = True
         method = "highest_promise"
         
@@ -50,7 +46,7 @@ def pick_values(var, domains, constraints, method="random"):
         random.shuffle(values)
         
     # Selects the value that reduces the least number of the smallest domains available   
-    elif method == "reduce_least_num_of_smallest_domains":
+    elif method == "least_constraining":
         min_domain_length = [99999]*len(values)
         num_at_minimum = [1]*len(values)
         for _, constraint in constraints:
@@ -86,7 +82,8 @@ def pick_values(var, domains, constraints, method="random"):
                         
 
         zipped = zip(promise, values)
-        zipped.sort(reverse=reverse)
+        # Zip sorts highest value first. If highest promise, reverse = True
+        zipped.sort(reverse=not reverse)
         values = [x for y, x in zipped]
         
     return values
