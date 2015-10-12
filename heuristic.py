@@ -6,6 +6,7 @@ def pick_variable(domains, constraints, method="random"):
     var = None
     variables = domains.keys()
 
+    # Picks the smallest domain
     if method == "smallest_domain":
         smallest_v = 99999
         for v in domains.keys():
@@ -15,71 +16,41 @@ def pick_variable(domains, constraints, method="random"):
                     smallest_v = lend
                     var = v
 
+    # Picka a random variable from the unassigned set (domain > 1)
     elif method == "random":
         random.shuffle(variables)
         for v in variables:
             if len(domains[v]) > 1:
                 var = v
                 break
-                    
-    if method == "smallest_domain_then_reduces_most_domains":
-        smallest_v = 99999
-        smallest_domain_vars = []
-        for v in domains.keys():
-            lend = len(domains[v]) 
-            if lend > 1:
-                if lend <= smallest_v:
-                    if lend < smallest_v:
-                        smallest_domain_vars = []
-                    smallest_v = lend
-                    smallest_domain_vars.append(v)
-        
-        
-        max_constraints = 100
-        for v in smallest_domain_vars:
-            constraint_choices = 0
-            if len(domains[v]) > 1:
-                for _, constraint in constraints:
-                    if v in constraint:
-                        for cons_var in constraint:
-                            if len(domains[cons_var]) > 1:
-                                constraint_choices += len(domains[cons_var])
-            #print domains, constraint_choices
-            if constraint_choices < max_constraints and constraint_choices > 0:
-                max_constraints = constraint_choices
-                var = v 
                 
-    #Selecting a variable which prunes the largest number of domains
-    if method == "reduces_least_domains":                       
-        max_constraints = 100
-        for v in domains.keys():
-            constraint_choices = 0
-            if len(domains[v]) > 1:
-                for _, constraint in constraints:
-                    if v in constraint:
-                        for cons_var in constraint:
-                            if len(domains[cons_var]) > 1:
-                                constraint_choices += len(domains[cons_var])
-            #print domains, constraint_choices
-            if constraint_choices < max_constraints and constraint_choices > 0:
-                max_constraints = constraint_choices
-                var = v
     return var
 
 
 def pick_values(var, domains, constraints, method="random"):
     """Value picking heuristic. Return a list of values for the specified
-    var. Values will be assigned in the provided order."""
+    var. Values should be assigned in the provided order."""
     
-    #all possible values the chosen variable (var) can take
+    # The possible values to choose from
     values = domains[var]
     
-    #random
+    # For 2 heuristics the reverse case is supported. Identify them and
+    # state that they should be reversed.
+    reverse = False
+    if method == "reduce_most_num_of_smallest_domains":
+        reverse = True
+        method = "reduce_least_num_of_smallest_domains"
+    elif method == "lowest_promive":
+        reverse = True
+        method = "highest_promise"
+        
+
+    # Randomly asserts the values
     if method == "random":
         random.shuffle(values)
         
-    #selects the value that reduces the least number of the smallest domains available   
-    if method == "reduce_least_num_of_smallest_domains":
+    # Selects the value that reduces the least number of the smallest domains available   
+    elif method == "reduce_least_num_of_smallest_domains":
         min_domain_length = [99999]*len(values)
         num_at_minimum = [1]*len(values)
         for _, constraint in constraints:
@@ -99,10 +70,9 @@ def pick_values(var, domains, constraints, method="random"):
         zipped = zip(min_domain_length, num_at_minimum, values)
         zipped = sorted(zipped, key = lambda x: (x[0], x[1]))
         values = [z for y, x, z in zipped]
-        #print zipped, values
         
-    #selects the value that reduces the least number of the smallest domains  available   
-    if method == "highest_promise":
+    # Selects the value that reduces the least number of the smallest domains  available   
+    elif method == "highest_promise":
         promise = [1]*len(values)
         for _, constraint in constraints:
             if var in constraint:
@@ -116,8 +86,7 @@ def pick_values(var, domains, constraints, method="random"):
                         
 
         zipped = zip(promise, values)
-        zipped.sort()
+        zipped.sort(reverse=reverse)
         values = [x for y, x in zipped]
-        #print zipped, values
         
     return values

@@ -2,10 +2,6 @@ import csp, sudoku
 import time, sys
 from copy import deepcopy
 
-## Uncomment this and the codeblock at the bottom
-## to print and save time/split/bt stats.
-#import numpy
-
 # Parse args
 if len(sys.argv) < 3:
     print "Please use with 2 arguments, e.g. run_csp sudokus.txt solutions.txt"
@@ -19,9 +15,13 @@ csp.constraints = sudoku.create_constraints(10)
 sudoku_domains = sudoku.create_domains(10)
 
 csp.variable_heuristic = "smallest_domain" #random, smallest_domain, smallest_domain_then_reduces_most_domains
-csp.value_heuristic = "random" #random, reduce_least_num_of_smallest_domains, highest_promise
+csp.value_heuristic = "highest_promise" #random, reduce_least_num_of_smallest_domains, highest_promise
 
-stats = []
+# Stats
+times  = []
+bts    = []
+splits = []
+stats  = []
 
 print "Start solving the sample file..."
 
@@ -40,6 +40,11 @@ with open(file_in, "r") as f_in,\
         local_start = time.time()
         solution = csp.solve(assignment, sudoku_domains)
         duration = time.time() - local_start
+
+        # Collect stats
+        times.append(duration)
+        bts.append(csp.backtracks)
+        splits.append(csp.splits)
         stats.append((duration, csp.backtracks, csp.splits))
 
         # Progress bar
@@ -54,8 +59,15 @@ with open(file_in, "r") as f_in,\
 duration = time.time() - start
 print "\nSolved in %s seconds. Check %s for results"%(duration,file_out)
 
-## Uncomment the following to save and display the time/bts/split stats.
-## Requires Numpy! 
+# Calculate average performance
+def avg(l):
+    return reduce(lambda x, y: x + y, l) / len(l)
+print "- Average performance -"
+print "Time: %s  BTs: %s  Splits: %s"%(avg(times), avg(bts), avg(splits))
+
+
+### Uncomment the following to save time/bts/split stats to a txt file.
+### Requires Numpy! 
+#import numpy
 #stats = numpy.asarray(stats)
 #numpy.savetxt("stats/"+csp.variable_heuristic + "_" + csp.value_heuristic + "_" + str(int(time.time()))[-7:], stats)
-#print "Times: %s  BTs: %s  Splits: %s"%(numpy.average(stats[:,0]), numpy.average(stats[:,1]), numpy.average(stats[:,2]))
